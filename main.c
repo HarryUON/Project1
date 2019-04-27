@@ -4,7 +4,8 @@
 //*****************************************************************************/
 #include <string.h>
 #include <stdio.h>
-#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
 	char string[80];//string to encrypt
 	char origString[80];
     int  rotatorN;
@@ -18,6 +19,8 @@
     char code [100];
     int key;
     
+//*******************************************************************
+//Ceasar cipher encription function prototype ↓↓↓
     
     char*encrypt(char*string,int rotatorN)
     {
@@ -48,6 +51,8 @@
         return string;
 }
 
+//*******************************************************************
+//Ceasar cipher decription function prototype ↓↓↓
 
     char*decrypt(char*string,int rotatorN)
     {
@@ -65,6 +70,14 @@
                else
                 string[i] -= rotatorN;
                }
+       //Making the output upper case ↓↓↓
+    i2=0;
+    for(i2=0;i2<strlen(string);i2++)                          //second for loop
+    {
+        if (string[i2]>=97 && string[i2]<=122)
+        {
+            string[i2]=string[i2]-32;             // makes output upper-case                   
+        }}     
        }    
        
     
@@ -76,9 +89,78 @@
         return string;
 }
 
+//*******************************************************************
+//Function prototype to find the index of the character ↓↓↓
+
+int find_index(char code[],char char_to_find)
+{
+    for(int i=0;i<26;i++)
+    {
+        if(code[i]==char_to_find)
+        {
+            return i;
+        }
+    }
+    return-1;
+}
+
+//*******************************************************************
+//Substitution cipher encryptor function prototype ↓↓↓
+
+char*encrypt2(char*message,char code[])
+{
+    int length=strlen(message);
+    char*encrypted_message=(char*)malloc(sizeof(char)*length);
+    for(int i=0;i<length;i++)
+    {
+        int encryption_index=tolower(message[i]-'a');
+        if(encryption_index>=0&&encryption_index<26)
+        {
+            encrypted_message[i]=code[encryption_index];
+        }
+        else
+        {
+            encrypted_message[i]=message[i];
+        }
+        //Making the output upper case ↓↓↓
+        if (encrypted_message[i]>=97 && encrypted_message[i]<=122)
+        {
+            encrypted_message[i]=encrypted_message[i]-32; 
+        }  
+    }
+    return encrypted_message;
+}
 
 
+//*******************************************************************
+//Substitution cipher decryptor function prototype ↓↓↓
+
+char*decrypt2(char*message,char code[]){
+    int length= strlen(message);
+    char*decrypted_message = (char*)malloc(sizeof(char)*length);
+    for(int i=0;i<length;i++){
+        int decryption_index=tolower(message[i])-'a';
+        if(decryption_index>=0&&decryption_index<26){
+            int code_index=find_index(code,tolower(message[i]));
+            decrypted_message[i]='a'+ code_index;
+        }
+        else{
+            decrypted_message[i]=message[i];
+        }}
+//Making the output upper case ↓↓↓
+    i2=0;
+    for(i2=0;i2<strlen(decrypted_message);i2++)                          //second for loop
+    {
+        if (decrypted_message[i2]>=97 && decrypted_message[i2]<=122)
+        {
+            decrypted_message[i2]=decrypted_message[i2]-32;             // makes output upper-case                   
+        }}
+    return decrypted_message;  
+    }  
     
+//*******************************************************************
+// Program main menu & switch statement ↓↓↓
+
 int main ()
 {
     printf("Chose from one of the options below: \n");
@@ -94,31 +176,33 @@ int main ()
     {
         
 //******************************************************************************
+//Program 1:
 //Encryption of a message using a custom ceasar cipher
 //Example encrypted cipher:
 //******************************************************************************
 case 1:
-    printf("*Encrypting a cesar cipher*");
-    printf("\nEnter the shift-key (between 1/25): ");
-    scanf("%d", &rotatorN);//storing the users shift-key inupt
-    printf("%d\n",rotatorN);
+    printf("★★★ Encrypting a Custom Cesar Cipher ★★★\n\n");
     puts("Enter String (in lower case): ");
     while (getchar() != '\n');
     {
         fgets(string, 80, stdin);
     }
     printf("%s", string);
+    printf("\nEnter the shift-key (between 1/25): ");
+    scanf("%d", &rotatorN);//storing the users shift-key inupt
+    printf("%d\n\n",rotatorN);
     printf("Encrypted string: ");
     encrypt(string,rotatorN);
     break;
  
 //******************************************************************************
+//Program 2:
 //Decryption of an encrypted ceasar cipher message
 //Example encrypted cipher:
-//******************************************************************************  
+//******************************************************************************    
 case 2:
-    printf("*Decrypting a cesar cipher*\n");
-    puts("Enter String (in lower case): ");
+    printf("★★★ Decrypting a Custom Cesar Cipher ★★★\n\n");
+    puts("Enter String (in lower case): \n");
     while (getchar() != '\n');
     {
         fgets(string, 80, stdin);
@@ -126,15 +210,55 @@ case 2:
     printf("%s", string);
     printf("Enter the shift-key (between 1/25): ");
     scanf("%d", &rotatorN);//storing the users shift-key inupt
-    printf("%d\n",rotatorN);
+    printf("%d\n\n",rotatorN);
     printf("Decrypted string: ");
     decrypt(string,rotatorN);
     break;
     
-    
-    
+//******************************************************************************
+//Program 3:
+//Encryption of a message using a custom Substitution cypher
+//Possible combinations: 26! ≈ 4 × 1026
+//↓↓ My custom character code ↓↓
+//  qzmdjftkvehycxopbrsguiwnla 
+//******************************************************************************    
+case 3:
+    printf("★★★ Encrypting a Custom Substitution Cipher ★★★\n\n");
+    puts("Enter String (in lower case): ");
+    while (getchar() != '\n');
+    {
+        fgets(message, 80, stdin);
+    }
+    printf("%s\n",message);
+    printf("Enter the char code: ");
+    scanf("%s",code);
+    printf("%s\n",code);
+    char*encrypted_message = encrypt2(message,code);
+    printf("\nEncrypted Message: ");
+    printf("%s",encrypted_message);    
+    break;
+
+//******************************************************************************
+//Program 4:    
+//Decryption of a custom substitution cypher (with key)
+//Enter the key as the substituted alphabet (no spaces)
+//Example encrypted msg: kqrrl jyyvogg
+//Character code: qzmdjftkvehycxopbrsguiwnla 
+//******************************************************************************
+case 4: 
+    printf("★★★ Decrypting a Custom Substitution Cipher ★★★\n\n");
+    printf("Enter an encrypted string (in lower-case): \n\n");
+    while (getchar() != '\n');
+    {
+        fgets(message, 80, stdin);
+    }
+    printf("Enter the char code: ");
+    scanf("%s",code);
+    printf("%s\n",code);
+    printf("Original message: %s\n",message);
+    char*decrypted_message = decrypt2(message,code);
+    printf("Decrypted message: %s",decrypted_message);    
     
     }
-return 0;}
-
-
+return 0;
+}
