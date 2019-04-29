@@ -1,5 +1,5 @@
 //*****************************************************************************/
-// c3255600 - ENGG1003
+// 	      ★★★ c3255600 - ENGG1003 ★★★ 
 // Menu driven cipher/decipher program by Harry Elliott
 // Program takes user input from stdin (upper AND lower case)
 // Does not attempt to decipher substitution cipher w/o key.
@@ -23,6 +23,7 @@
 #include <ctype.h>
 	char string[1000];//string to encrypt
 	char origString[80];
+	char decripted[1000];
     int  rotatorN;
     char chara[50];
     int n = 0;
@@ -211,11 +212,12 @@ char*decrypt2(char*message,char code[]){
 int main ()
 {
     printf("↓↓ Chose from one of the options below ↓↓ \n\n");
-    printf("1. Encrypting a custom rotation cypher: \n");
-    printf("2. Decrypting a custom rotation cypher: \n");
-    printf("3. Encrypting a custom substitution cypher: \n");
-    printf("4. Decrypting a custom substitution cypher: \n");
-    printf("5. Exit \n");
+    printf("1. Encrypting a custom rotation cypher (with key) \n");
+    printf("2. Decrypting a custom rotation cypher (with key) \n");
+    printf("3. Encrypting a custom substitution cypher (with key) \n");
+    printf("4. Decrypting a custom substitution cypher (with key) \n");
+    printf("5. Decrypting a custom rotation cypher (without key) \n");
+    printf("6. Exit \n");
     printf("\nEnter your choice: ");
     scanf("%d",&choice);
     printf("%d\n",choice);
@@ -287,9 +289,9 @@ case 3:
     break;
 
 //******************************************************************************
-//Program 4:    
-//Decryption of a custom substitution cypher (with key)
-//Enter the key as the substituted alphabet (no spaces)
+// Program 4:    
+// Decryption of a custom substitution cypher (with key)
+// Enter the key as the substituted alphabet (no spaces)
 // ↓↓ My custom character code ↓↓
 //  qzmdjftkvehycxrpbosguiwnla 
 //******************************************************************************
@@ -308,16 +310,50 @@ case 4:
     printf("Decrypted message: %s",decrypted_message);    
     break;
     
-    
+//******************************************************************************
+// Program 5:    
+// Decryption of a custom rotation cypher (without a key)
+// Prints all 26 possible combinatios and allows the user to find the correct shift key.
+//******************************************************************************    
 case 5:
+    printf("\n★★★ Decrypting a Custom Rotation Cipher (without key) ★★★\n\n");
+    puts("\nEnter String (in lower case): \n\n");
+    puts("↓↓ Find the correct shift key ↓↓");
+    fgets(string, 80, stdin);
+    printf("%s\n\n", string);  
+    i4=0;
+    rotatorN=1;
+    for (i4=0;i4<27;i4++)
+    {
+        printf("Shift-key: ");
+        printf("%d\n",rotatorN);
+        puts("Decrypted String: \n");
+        decripted==decrypt(string,rotatorN);
+        printf("%s",decripted);
+        rotatorN++;
+    }
+break;
+
+//******************************************************************************
+// Program 6:
+// Option to exit program
+//******************************************************************************
+case 6:
     printf("Bye!");
     exit(0);
     break;
 
+
+//******************************************************************************
+// If user enters an invalid choice 
+//******************************************************************************
 default:
     printf("You have entered an invalid choice...\n\n");
     printf("Run again and chose from options 1 to 5.");
     break;
     }
+//******************************************************************************
+// End of program
+//******************************************************************************
 return 0;
 }
