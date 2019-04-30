@@ -1,5 +1,5 @@
 //*****************************************************************************/
-// 	      ★★★ c3255600 - ENGG1003 ★★★ 
+// c3255600 - ENGG1003
 // Menu driven cipher/decipher program by Harry Elliott
 // Program takes user input from stdin (upper AND lower case)
 // Does not attempt to decipher substitution cipher w/o key.
@@ -21,12 +21,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-	char string[1000];//string to encrypt
+	char string[1500];//string to encrypt
 	char origString[80];
 	char decripted[1000];
     int  rotatorN;
     char chara[50];
     int n = 0;
+    int n2 = 0;
     int choice;
     int shiftKey = 0; //the desired difference between the string and the encryption
     int i=0; //counter1
@@ -40,61 +41,30 @@
 //*******************************************************************
 //Ceasar cipher encription function prototype ↓↓↓
     
-    char*encrypt(char*string,int rotatorN)
-    {
-	for(i=0; string[i] != '\0'; i++) 
-     {                                            //first for loop
-          if(string[i] >='a' && string[i] <='z' || string[i] >='A' && string[i] <='Z')  //for every letter within a/z (upper and lower case)
-             {
-                n = 'z' - string[i];
-                if( rotatorN > n )
-                 {
-                    shiftKey = rotatorN - n - 1;
-                    string[i] = 'a'-32;             //making string loop back to 'a' when reaching 'z'
-                    string[i] += shiftKey;
-                  }  
-               else
-                string[i] += rotatorN;
-               }
-    for(i2=0;i2<n;i2++)                          //second for loop
-    {
-        if (string[i]>=97 && string[i]<=122)
-            string[i]=string[i]-32;             // makes output upper-case                   
-    }  
-       }
-    for(i3=0; string[i3] !='\0'; i3++)         //third for loop
-        {
-        printf("%c", string[i3]);             //prints every character of the encoded string
-        }
-        return string;
-}
-
-//*******************************************************************
-//Ceasar cipher decryption function prototype ↓↓↓
-
-char*decrypt(char*string,int rotatorN)
+char*encrypt(char*string,int rotatorN)
 {
-for(i=0; string[i] != '\0'; i++) 
-{                                            //first for loop
-    n = string[i]; 
-    if(string[i] >='a' && string[i] <='z')  //for every letter within a/z (upper and lower case)
-    {
-        n = n - rotatorN;
-        if( n<'a')
-        {
-            n=n+'z'-'a'+1;
-        }            
-        string[i]=n;
-    }
-    else if(n>='A' && n<='Z')
-    {
-        n=n-rotatorN;
-        if (n<'A')
-        {
-            n=n+'Z'-'A'+1;
-        }
-        string[i]=n;
-    }}
+for(i = 0; string[i] != '\0'; ++i){
+		n = string[i];
+		
+		if(n >= 'a' && n <= 'z'){
+			n = n + rotatorN;
+			
+			if(n > 'z'){
+				n = n - 'z' + 'a' - 1;
+			}
+			
+			string[i] = n;
+		}
+		else if(n >= 'A' && n <= 'Z'){
+			n = n + rotatorN;
+			
+			if(n > 'Z'){
+				n = n - 'Z' + 'A' - 1;
+			}
+			
+			string[i] = n;
+		}
+	}
     i2=0;
     for(i2=0;i2<strlen(string);i2++)                          //second for loop
     {
@@ -104,6 +74,36 @@ for(i=0; string[i] != '\0'; i++)
         }
 
     } 
+    printf("%s",string);
+    return string;
+}
+//*******************************************************************
+//Ceasar cipher decryption function prototype ↓↓↓
+
+char*decrypt(char*string,int rotatorN)
+{
+i=0;
+for(i = 0; string[i] != '\0'; ++i){
+		n = string[i];
+		if(n >= 'a' && n <= 'z'){
+			n = n - rotatorN;
+			
+			if(n < 'a'){
+				n = n + 'z' - 'a' + 1;
+			}
+			
+			string[i] = n;
+		}
+		else if(n >= 'A' && n <= 'Z'){
+			n = n - rotatorN;
+			
+			if(n < 'A'){
+				n = n + 'Z' - 'A' + 1;
+			}
+			
+			string[i] = n;
+		}
+	}
     printf("%s",string);
     return string;
 }
@@ -232,14 +232,17 @@ int main ()
 //******************************************************************************
 case 1:
     printf("★★★ Encrypting a Custom Cesar Cipher ★★★\n\n");
-    puts("Enter String (in lower case): ");
+    printf("Enter String (in lower case): ");
     while (getchar() != '\n');
     {
         fgets(string, 80, stdin);
     }
     printf("%s", string);
-    printf("\nEnter the shift-key (between 1/25): ");
-    scanf("%d", &rotatorN);//storing the users shift-key inupt
+    printf("\n\nEnter the shift-key (between 1/25): ");
+    while (getchar() != '\n');
+    {
+        scanf("%d", &rotatorN);//storing the users shift-key inupt
+    }
     printf("%d\n\n",rotatorN);
     printf("Encrypted string: ");
     encrypt(string,rotatorN);
@@ -251,13 +254,13 @@ case 1:
 //Example encrypted cipher:
 //******************************************************************************    
 case 2:
-    printf("★★★ Decrypting a Custom Cesar Cipher ★★★\n\n\n");
+    printf("\n★★★ Decrypting a Custom Cesar Cipher ★★★\n\n\n");
     printf("Enter String (in lower case): \n");
     while (getchar() != '\n');
     {
         fgets(string,sizeof(string), stdin);
     }
-    printf("%s\n\n", string);
+    printf("%s\n\n",string);
     printf("Enter the shift-key (between 1/25): ");
     scanf("%d", &rotatorN);//storing the users shift-key inupt
     printf("%d\n\n\n",rotatorN);
